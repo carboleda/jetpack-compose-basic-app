@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">ComposeBasicTutorial</string>
+    <string name="app_name">Compose Basic Tutorial</string>
+    <string name="meetup_title">Android 11 Meetup | Neiva</string>
+    <string name="meetup_description">Android 11, es una serie de eventos realizados a nivel mundial. Gracias al apoyo de Google podemos organizar uno en nuestra ciudad.</string>
+    <string name="schedule">Agenda</string>
 </resources>

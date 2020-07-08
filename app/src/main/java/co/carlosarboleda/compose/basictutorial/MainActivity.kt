@@ -13,52 +13,90 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.imageResource
+import androidx.ui.res.stringResource
 import androidx.ui.text.style.TextOverflow
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
-import co.carlosarboleda.compose.basictutorial.ui.ComposeBasicTutorialTheme
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NewStory()
+            NewMeetup(meetup = getMeetupData())
         }
     }
 }
 
+data class Meetup(
+        val title: String,
+        val description: String,
+        val image: Int,
+        val schedule: List<String>
+)
+
 @Composable
-fun NewStory() {
-    val image = imageResource(id = R.drawable.header)
+fun getMeetupData() = Meetup(
+        title = stringResource(id = R.string.meetup_title),
+        description = stringResource(id = R.string.meetup_description),
+        image = R.drawable.android11_meetup_neiva,
+        schedule = listOf(
+                "08:00 => Bienvenida",
+                "08:30 => Introducción a Android",
+                "09:30 => Novedades en Android 11",
+                "10:30 => Cómo trabajar ordenados con arquitectura MVVM en Android",
+                "11:30 => Entendiendo Android Jetpack Compose"
+        )
+)
+
+@Composable
+fun NewMeetup(meetup: Meetup) {
     val typography = MaterialTheme.typography
     MaterialTheme {
         Column(
                 modifier = Modifier.padding(16.dp)
         ) {
-            Image(
-                    asset = image,
-                    modifier = Modifier.preferredHeightIn(maxHeight = 180.dp)
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(4.dp)),
-                    contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.preferredHeight(16.dp))
+            MeetupImage(imageId = meetup.image)
 
             Text(
-                    text = "A day wandering through the sandhills in Shark Fin Cove," +
-                            "and a few of the sights I saw",
+                    text = meetup.title,
                     style = typography.h6,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
             )
-            Text(text = "Davenport, California", style = typography.body2)
-            Text(text = "July 2020", style = typography.body2)
+            Text(text = meetup.description, style = typography.body2)
+
+            MeetupSchedule(meetup.schedule)
         }
+    }
+}
+
+@Composable
+fun MeetupImage(imageId: Int) {
+    Image(
+            asset = imageResource(id = imageId),
+            modifier = Modifier.preferredHeightIn(maxHeight = 180.dp)
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(4.dp)),
+            contentScale = ContentScale.Crop
+    )
+    Spacer(modifier = Modifier.preferredHeight(16.dp))
+}
+
+@Composable
+fun MeetupSchedule(schedule: List<String>) {
+    val typography = MaterialTheme.typography
+    Spacer(modifier = Modifier.preferredHeight(16.dp))
+    Text(
+            text = stringResource(id = R.string.schedule),
+            style = typography.h6
+    )
+    schedule.forEach {
+        Text(text = it)
     }
 }
 
 @Preview(showDecoration = true)
 @Composable
 fun DefaultPreview() {
-    NewStory()
+    NewMeetup(meetup = getMeetupData())
 }
